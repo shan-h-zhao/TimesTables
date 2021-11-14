@@ -16,8 +16,16 @@ public class MainActivity extends AppCompatActivity {
     int timer;
     ArrayList<Integer> baseNumbers = new ArrayList<Integer>();
     ArrayList<Integer> numbers = new ArrayList<Integer>();
+    ListView listView;
 
-
+    public void generateTimesTable (int timer) {
+        numbers.clear();
+        for (int j = 0; j <= 8; j++) {
+            numbers.add(baseNumbers.get(j) * timer);
+        }
+        ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_list_item_1, numbers);
+        listView.setAdapter(arrayAdapter);
+    }
 
 
     @Override
@@ -27,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
         /* number list */
 
-        ListView listView = findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         for (int i = 1; i <= 9; i++) {
             baseNumbers.add(i);
         }
+
+        generateTimesTable (1);
 
         /* seekBar values */
 
@@ -40,22 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
         SeekBar seekBar = findViewById(R.id.seekBar);
         seekBar.setMax((max-min)/step);
+        seekBar.setProgress(0);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.i("seekBar changed", Integer.toString(i));
                 timer = i+1;
-
-                numbers.clear();
-                for (int j = 0; j <= 8; j++) {
-                    numbers.add(baseNumbers.get(j) * timer);
-                }
-
-                ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(MainActivity.this, android.R.layout.simple_list_item_1, numbers);
-                listView.setAdapter(arrayAdapter);
-
-
+                generateTimesTable(timer);
             }
 
             @Override
@@ -68,12 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
 
     }
 }
