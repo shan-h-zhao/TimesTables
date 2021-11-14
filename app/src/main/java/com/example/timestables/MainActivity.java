@@ -2,8 +2,11 @@ package com.example.timestables;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 
 import java.util.ArrayList;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     int timer;
+    ArrayList<Integer> baseNumbers = new ArrayList<Integer>();
     ArrayList<Integer> numbers = new ArrayList<Integer>();
 
 
@@ -20,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /* number list */
+
+        ListView listView = findViewById(R.id.listView);
+        for (int i = 1; i <= 9; i++) {
+            baseNumbers.add(i);
+        }
 
         /* seekBar values */
 
@@ -34,7 +45,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 Log.i("seekBar changed", Integer.toString(i));
-                timer = i;
+                timer = i+1;
+
+                numbers.clear();
+                for (int j = 0; j <= 8; j++) {
+                    numbers.add(baseNumbers.get(j) * timer);
+                }
+
+                ArrayAdapter<Integer> arrayAdapter = new ArrayAdapter<Integer>(MainActivity.this, android.R.layout.simple_list_item_1, numbers);
+                listView.setAdapter(arrayAdapter);
+
+
             }
 
             @Override
@@ -48,12 +69,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /* number list */
 
-        for (int i = 1; i <= 9; i++) {
-            numbers.add(i);
 
-        }
+
+
 
 
     }
